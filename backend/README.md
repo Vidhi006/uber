@@ -1,4 +1,4 @@
-# Users API — Register
+# Backend API Documentation
 
 ## Endpoint
 - POST `/users/register`
