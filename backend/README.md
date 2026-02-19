@@ -1,4 +1,4 @@
-# Backend API Documentation
+# Users API — Register
 
 ## Endpoint
 - POST `/users/register`
@@ -58,7 +58,6 @@ Example request:
   Example:
   ```json
   { "message": "Internal server error" }
-<<<<<<< HEAD
   ```
 
 ---
@@ -127,6 +126,3 @@ Example request:
   ```
 
 Note: returned user objects exclude the password field (schema uses select: false).
-=======
-  ``` 
->>>>>>> 10c1b5e4d3fe9f7ba2f6a1926bf209843110f4b0
