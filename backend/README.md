@@ -126,3 +126,71 @@ Example request:
   ```
 
 Note: returned user objects exclude the password field (schema uses select: false).
+
+---
+
+# Users API — Profile
+
+## Endpoint
+- GET `/users/profile`
+
+## Description
+Retrieve the authenticated user's profile. Requires a valid JWT sent either as a cookie named `token` or in the `Authorization: Bearer <token>` header.
+
+## Authentication
+- Protected route; `authMiddleware.authUser` ensures the token is valid and attaches the user to `req.user`.
+
+## Responses / Status Codes
+
+- 200 OK  
+  Body: the user object (no password).  
+  Example:
+  ```json
+  {
+    "_id": "607d1f77bcf86cd799439011",
+    "fullname": { "firstname": "John", "lastname": "Doe" },
+    "email": "john.doe@example.com",
+    "socketId": null
+  }
+  ```
+
+- 401 Unauthorized  
+  When no token or an invalid token is provided.
+  ```json
+  { "message": "Authentication failed" }
+  ```
+
+- 500 Internal Server Error  
+  Example:
+  ```json
+  { "message": "Internal server error" }
+  ```
+
+---
+
+# Users API — Logout
+
+## Endpoint
+- GET `/users/logout`
+
+## Description
+Invalidate the current JWT by clearing the `token` cookie and saving it to a blacklist collection. This prevents the token from being used again.
+
+## Authentication
+- Protected route; requires a valid token as described above.
+
+## Responses / Status Codes
+
+- 200 OK  
+  ```json
+  { "message": "Logged out" }
+  ```
+
+- 401 Unauthorized  
+  When the token is missing or invalid.
+
+- 500 Internal Server Error  
+  Example:
+  ```json
+  { "message": "Internal server error" }
+  ```
