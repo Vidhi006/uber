@@ -287,3 +287,146 @@ Invalidate the current JWT by clearing the `token` cookie and saving it to a bla
   ```json
   { "message": "Internal server error" }
   ```
+
+# Captains API — Login
+
+## Endpoint
+- POST `/captains/login`
+
+## Description
+Authenticate a captain using email and password. Responds with JWT token and captain data.
+
+## Request body (JSON)
+- email (string, required) — valid email
+- password (string, required) — at least 6 characters
+
+Example request:
+```json
+{
+  "email": "jane.smith@example.com",
+  "password": "secret123"
+}
+```
+
+## Validation
+- `email` must be a valid email
+- `password` minimum length 6
+
+## Responses / Status Codes
+
+- 200 OK  
+  Body: `{ "token": "<jwt>", "captain": { ... } }`  
+  Example:
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....",
+    "captain": {
+      "_id": "607d1f77bcf86cd799439012",
+      "fullname": { "firstname": "Jane", "lastname": "Smith" },
+      "email": "jane.smith@example.com",
+      "vehicle": {
+        "color": "red",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+      }
+    }
+  }
+  ```
+
+- 400 Bad Request (validation error)  
+  Example:
+  ```json
+  {
+    "errors": [
+      { "msg": "Invalid Email", "param": "email", "location": "body" }
+    ]
+  }
+  ```
+
+- 401 Unauthorized (invalid credentials)  
+  ```json
+  { "message": "Invalid email or password" }
+  ```
+
+- 500 Internal Server Error  
+  Example:
+  ```json
+  { "message": "Internal server error" }
+  ```
+
+---
+
+# Captains API — Profile
+
+## Endpoint
+- GET `/captains/profile`
+
+## Description
+Retrieve the authenticated captain's profile. Requires a valid JWT sent either as a cookie named `token` or in the `Authorization: Bearer <token>` header.
+
+## Authentication
+- Protected route; `authCaptain` middleware ensures the token is valid and attaches the captain to `req.captain`.
+
+## Responses / Status Codes
+
+- 200 OK  
+  Body: the captain object (no password).  
+  Example:
+  ```json
+  {
+    "_id": "607d1f77bcf86cd799439012",
+    "fullname": { "firstname": "Jane", "lastname": "Smith" },
+    "email": "jane.smith@example.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+  ```
+
+- 401 Unauthorized  
+  When no token or an invalid token is provided.
+  ```json
+  { "message": "Authentication failed" }
+  ```
+
+- 500 Internal Server Error  
+  Example:
+  ```json
+  { "message": "Internal server error" }
+  ```
+
+---
+
+# Captains API — Logout
+
+## Endpoint
+- GET `/captains/logout`
+
+## Description
+Invalidate the current JWT by clearing the `token` cookie and saving it to a blacklist collection. This prevents the token from being used again.
+
+## Authentication
+- Protected route; requires a valid token as described above.
+
+## Responses / Status Codes
+
+- 200 OK  
+  ```json
+  { "message": "Logout successfully" }
+  ```
+
+- 401 Unauthorized  
+  When the token is missing or invalid.
+
+- 500 Internal Server Error  
+  Example:
+  ```json
+  { "message": "Internal server error" }
+  ```
+
+---
+
