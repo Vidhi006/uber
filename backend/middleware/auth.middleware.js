@@ -17,7 +17,7 @@ module.exports.authUser = async(req,res , next) =>{
 
     const isBlackListed = await blacklistTokenModel.findOne({token: token})
     if(isBlackListed){
-        return res.status(401).json({message: "Unauthorized"})
+        return res.status(401).json({message: "Unauthorized and blacklisted"})
     }
     // aagr token mil jata h to token to decode krenge and code try and catch me likhenge
     try{
