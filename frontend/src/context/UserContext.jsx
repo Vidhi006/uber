@@ -1,5 +1,8 @@
 import React, { createContext, useState } from 'react'
 //isse pure app ko wrap krna h
+// So we use Context API to create global state.
+
+// UserDataContext = global storage for user data.
 
 export const UserDataContext = createContext()
 // createContext():
